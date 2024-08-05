@@ -40,10 +40,12 @@ jobs:
           - target: linux-x64-static_lib
             runs-on: ubuntu-22.04
             build: ./build-static_lib.sh
+            post-build: zip a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           - target: osx-arm64-static_lib
             runs-on: macos-14
             build: ./build-static_lib.sh
+            post-build: zip a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           # - target: osx-universal2-static_lib
           #   runs-on: macos-13-xlarge
@@ -54,10 +56,12 @@ jobs:
           - target: osx-x86_64-static_lib
             runs-on: macos-13
             build: ./build-static_lib.sh
+            post-build: zip a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           - target: win-x64-static_lib
             runs-on: windows-2022
             build: ./build-static_lib.sh
+            post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           # - target: wasm-static_lib
           #   runs-on: ubuntu-22.04
@@ -84,8 +88,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - uses: milliewalky/setup-7-zip@v1
 
       - name: Setup GCC
         if: runner.os == 'Linux'
@@ -153,7 +155,7 @@ jobs:
         run: ${{ matrix.build }}
 
       - name: Post build
-        run: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
+        run: ${{ matrix.post-build }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
