@@ -132,8 +132,8 @@ jobs:
       - name: Setup Xcode
         if: runner.os == 'macOS'
         uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ env.XCODE_VERSION }}
+        # with:
+        #   xcode-version: ${{ env.XCODE_VERSION }}
 
       - name: Set ONNX Runtime version
         run: |
