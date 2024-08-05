@@ -45,7 +45,7 @@ jobs:
           - target: osx-arm64-static_lib
             runs-on: macos-14
             build: ./build-static_lib.sh
-            post-build: zip -r -y $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
+            post-build: mv output $ARCHIVE_NAME && zip -r -y $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           # - target: osx-universal2-static_lib
           #   runs-on: macos-13-xlarge
