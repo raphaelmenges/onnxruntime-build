@@ -1,28 +1,10 @@
 # ONNX Runtime Build
 
-This project is to build custom [ONNX Runtime](https://onnxruntime.ai) libraries which are not provided in [the official releases](https://github.com/microsoft/onnxruntime/releases).
+Fork of <https://github.com/supertone-inc/onnxruntime-build>.
 
-Currently supports static library builds only with the default options.
+## How to release a new version
 
-## Building Libraries
-
-### Prerequisites
-
-- [Requirements for building ONNX Runtime for inferencing](https://onnxruntime.ai/docs/build/inferencing.html#prerequisites) (for native build)
-- [Requirements for building ONNX Runtime for Web](https://onnxruntime.ai/docs/build/web.html#prerequisites) (for Wasm build)
-- Bash
-  - On Windows, you can use Git Bash provided by [Git for Windows](https://git-scm.com/download/win).
-
-### Build Scripts
-
-Build for native:
-
-```sh
-./build-static_lib.sh
-```
-
-Build for Wasm:
-
-```sh
-./build-wasm-static_lib.sh
-```
+1. Upgrade the submodule `onnxruntime` with the new version of the ONNX runtime. You can check the releases or tags [in their repository](https://github.com/microsoft/onnxruntime).
+1. Upgrade the ONNX runtime version in `ONNXRUNTIME_VERSION` accordingly.
+1. Create a new tag of the version in the repository via `git tag vX.X.X` and push it to GitHub via `git push origin --tags`.
+1. The `Build` workflow of GitHub actions should be automatically triggered by the new tag and after a few minutes a new release should be listed in this GitHub repository.
