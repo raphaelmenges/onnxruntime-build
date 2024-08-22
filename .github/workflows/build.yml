@@ -38,7 +38,7 @@ jobs:
           #     ./build-static_lib.sh
 
           - target: linux-x64-static_lib
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-latest
             build: ./build-static_lib.sh
             post-build: mv $OUTPUT_DIR $ARCHIVE_NAME && zip -r -y $ARCHIVE_DIR/$ARCHIVE_NAME.zip $ARCHIVE_NAME/*
 
