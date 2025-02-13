@@ -260,3 +260,5 @@ jobs:
           path: |
             build/Debug/libonnxruntime.a
             build/Release/libonnxruntime.a
+            build/Debug/Debug/onnxruntime.lib
+            build/Release/Release/onnxruntime.lib
