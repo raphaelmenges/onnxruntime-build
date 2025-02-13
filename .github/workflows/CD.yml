@@ -8,12 +8,13 @@ on:
         type: string
         default: "v1.20.2"
 
+# XCODE_VERSION should work for x64 and arm64
 env:
   GCC_VERSION: 11
   CMAKE_VERSION: 3.26
   PYTHON_VERSION: 3.9
   NODE_VERSION: 22
-  XCODE_VERSION: 15.4.0
+  XCODE_VERSION: 15.2.0
 
 defaults:
   run:
