@@ -6,7 +6,7 @@ on:
       ref:
         description: "Branch or tag to checkout."
         type: string
-        default: "v1.20.1"
+        default: "v1.20.2"
 
 env:
   GCC_VERSION: 11
