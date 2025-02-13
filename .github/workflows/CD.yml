@@ -1,0 +1,262 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch or tag to checkout."
+        type: string
+        default: "v1.20.1"
+
+env:
+  GCC_VERSION: 11
+  CMAKE_VERSION: 3.26
+  PYTHON_VERSION: 3.9
+  NODE_VERSION: 20
+  XCODE_VERSION: 14.2
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build
+    runs-on:  ${{ matrix.runs-on }}
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64-static_lib
+            runs-on: ubuntu-22.04
+
+          - target: osx-arm64-static_lib
+            runs-on: macos-14
+
+          - target: osx-x64-static_lib
+            runs-on: macos-13
+
+          - target: win-x64-static_lib
+            runs-on: windows-2022
+
+          - target: wasm-static_lib-simd-threaded
+            runs-on: ubuntu-22.04
+
+    steps:
+      - name: Clone onnxruntime
+        uses: actions/checkout@v4
+        with:
+          repository: "microsoft/onnxruntime"
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: Setup GCC
+        if: runner.os == "Linux"
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: ${{ env.GCC_VERSION }}
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: ${{ env.CMAKE_VERSION }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup Xcode
+        if: runner.os == "macOS"
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Setup Protoc
+        uses: arduino/setup-protoc@v3
+
+      # Linux x64 build
+      - name: Run Linux x64 debug build
+        if: matrix.target == "linux-x64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Debug \
+            --update \
+            --build \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      - name: Run Linux x64 release build
+        if: matrix.target == "linux-x64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Release \
+            --update \
+            --build \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      # macOS arm64 build
+      - name: Run macOS arm64 debug build
+        if: matrix.target == "osx-arm64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Debug \
+            --update \
+            --build \
+            --osx_arch arm64 \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_coreml \
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      - name: Run macOS arm64 release build
+        if: matrix.target == "osx-arm64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Release \
+            --update \
+            --build \
+            --osx_arch arm64 \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_coreml \
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      # macOS x64 build
+      - name: Run macOS x64 debug build
+        if: matrix.target == "osx-x64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Debug \
+            --update \
+            --build \
+            --osx_arch x86_64 \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_coreml \
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      - name: Run macOS x86_64 release build
+        if: matrix.target == "osx-x64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Release \
+            --update \
+            --build \
+            --osx_arch x86_64 \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_coreml \
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      # Windows x64 build
+      - name: Run Windows x64 debug build
+        if: matrix.target == "win-x64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Debug \
+            --update \
+            --build \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_dml \
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      - name: Run Windows x86_64 release build
+        if: matrix.target == "win-x64-static_lib"
+        continue-on-error: true
+        run: |
+          python3 ./tools/ci_build/build.py \
+            --build_dir ./build \
+            --config Release \
+            --update \
+            --build \
+            --parallel \
+            --skip_tests \
+            --disable_rtti
+            --use_dml \
+            --use_xnnpack \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+
+      # WASM build 
+      - name: Run WASM debug build
+        if: matrix.target == "wasm-static_lib-simd-threaded"
+        continue-on-error: true
+        run: |
+          ./build.sh \
+          --build_dir ./build \
+          --config Debug \
+          --build_wasm_static_lib \
+          --enable_wasm_simd \
+          --enable_wasm_threads \
+          --skip_tests \
+          --disable_rtti \
+          --parallel
+
+      - name: Run WASMM release build
+        if: matrix.target == "wasm-static_lib-simd-threaded"
+        continue-on-error: true
+        run: |
+          ./build.sh \
+          --build_dir ./build \
+          --config Release \
+          --build_wasm_static_lib \
+          --enable_wasm_simd \
+          --enable_wasm_threads \
+          --skip_tests \
+          --disable_wasm_exception_catching \
+          --disable_rtti \
+          --parallel
+
+      - name: Rename WASM library
+        if: matrix.target == "wasm-static_lib-simd-threaded"
+        continue-on-error: true
+        run: |
+          mv build/Debug/libonnxruntime_webassembly.a build/Debug/libonnxruntime.a
+          mv build/Release/libonnxruntime_webassembly.a build/Release/libonnxruntime.a
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: onnxruntime-${{ github.event.inputs.ref }}-${{ matrix.target }}
+          path: |
+            build/Debug/libonnxruntime.a
+            build/Release/libonnxruntime.a
