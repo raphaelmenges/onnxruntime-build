@@ -12,8 +12,8 @@ env:
   GCC_VERSION: 11
   CMAKE_VERSION: 3.26
   PYTHON_VERSION: 3.9
-  NODE_VERSION: 20
-  XCODE_VERSION: 14.2
+  NODE_VERSION: 22
+  XCODE_VERSION: 15.4.0
 
 defaults:
   run:
@@ -90,13 +90,11 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Debug \
-            --update \
-            --build \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       - name: Run Linux x64 release build
         if: matrix.target == 'linux-x64-static_lib'
@@ -105,13 +103,11 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Release \
-            --update \
-            --build \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       # macOS arm64 build
       - name: Run macOS arm64 debug build
@@ -121,15 +117,13 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Debug \
-            --update \
-            --build \
             --osx_arch arm64 \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_coreml \
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_COREML=ON \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       - name: Run macOS arm64 release build
         if: matrix.target == 'osx-arm64-static_lib'
@@ -138,15 +132,13 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Release \
-            --update \
-            --build \
             --osx_arch arm64 \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_coreml \
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_COREML=ON \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       # macOS x64 build
       - name: Run macOS x64 debug build
@@ -156,32 +148,28 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Debug \
-            --update \
-            --build \
             --osx_arch x86_64 \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_coreml \
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_COREML=ON \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
-      - name: Run macOS x86_64 release build
+      - name: Run macOS x64 release build
         if: matrix.target == 'osx-x64-static_lib'
         continue-on-error: true
         run: |
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Release \
-            --update \
-            --build \
             --osx_arch x86_64 \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_coreml \
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_COREML=ON \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       # Windows x64 build
       - name: Run Windows x64 debug build
@@ -191,14 +179,13 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Debug \
-            --update \
-            --build \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_dml \
-            --use_xnnpack \
+            --enable_msvc_static_runtime \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_DML=ON \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       - name: Run Windows x86_64 release build
         if: matrix.target == 'win-x64-static_lib'
@@ -207,14 +194,12 @@ jobs:
           python3 ./tools/ci_build/build.py \
             --build_dir ./build \
             --config Release \
-            --update \
-            --build \
             --parallel \
             --skip_tests \
             --disable_rtti
-            --use_dml \
-            --use_xnnpack \
             --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
+            --cmake_extra_defines onnxruntime_USE_DML=ON \
+            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
 
       # WASM build 
       - name: Run WASM debug build
