@@ -95,9 +95,8 @@ jobs:
             --config Debug \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_XNNPACK=ON
 
       - name: Run Linux x64 release build
         if: matrix.target == 'linux-x64-static_lib'
@@ -108,9 +107,8 @@ jobs:
             --config Release \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_XNNPACK=ON
 
       # macOS arm64 build
       - name: Run macOS arm64 debug build
@@ -123,10 +121,8 @@ jobs:
             --osx_arch arm64 \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_COREML=ON \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_COREML=ON onnxruntime_USE_XNNPACK=ON
 
       - name: Run macOS arm64 release build
         if: matrix.target == 'osx-arm64-static_lib'
@@ -138,10 +134,8 @@ jobs:
             --osx_arch arm64 \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_COREML=ON \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_COREML=ON onnxruntime_USE_XNNPACK=ON
 
       # macOS x64 build
       - name: Run macOS x64 debug build
@@ -154,10 +148,8 @@ jobs:
             --osx_arch x86_64 \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_COREML=ON \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_COREML=ON onnxruntime_USE_XNNPACK=ON
 
       - name: Run macOS x64 release build
         if: matrix.target == 'osx-x64-static_lib'
@@ -169,10 +161,8 @@ jobs:
             --osx_arch x86_64 \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_COREML=ON \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_COREML=ON onnxruntime_USE_XNNPACK=ON
 
       # Windows x64 build
       - name: Run Windows x64 debug build
@@ -184,11 +174,9 @@ jobs:
             --config Debug \
             --parallel \
             --skip_tests \
-            --disable_rtti
+            --disable_rtti \
             --enable_msvc_static_runtime \
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_DML=ON \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_DML=ON onnxruntime_USE_XNNPACK=ON
 
       - name: Run Windows x86_64 release build
         if: matrix.target == 'win-x64-static_lib'
@@ -199,10 +187,8 @@ jobs:
             --config Release \
             --parallel \
             --skip_tests \
-            --disable_rtti
-            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF \
-            --cmake_extra_defines onnxruntime_USE_DML=ON \
-            --cmake_extra_defines onnxruntime_USE_XNNPACK=ON \
+            --disable_rtti \
+            --cmake_extra_defines onnxruntime_BUILD_SHARED_LIB=OFF onnxruntime_USE_DML=ON onnxruntime_USE_XNNPACK=ON
 
       # WASM build 
       - name: Run WASM debug build
