@@ -227,6 +227,12 @@ jobs:
           mv build/Debug/libonnxruntime_webassembly.a build/Debug/libonnxruntime.a
           mv build/Release/libonnxruntime_webassembly.a build/Release/libonnxruntime.a
 
+      - name: Print contents of build dir
+        uses: jaywcjlove/github-action-folder-tree@main
+        with:
+          path: ./build
+          depth: 10
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
