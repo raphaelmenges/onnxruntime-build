@@ -82,6 +82,8 @@ jobs:
 
       - name: Setup Protoc
         uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }} # Avoid rate limit.
 
       # Linux x64 build
       - name: Run Linux x64 debug build
